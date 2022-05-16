@@ -5,7 +5,7 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#556cd6",
+      main: teal[400],
     },
     secondary: {
       main: "#19857b",
@@ -14,14 +14,23 @@ const theme = createTheme({
       main: red.A400,
     },
     background: {
-      paper: teal[100],
+      default: teal[100],
     },
   },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: teal[500],
+          background: teal[800],
+        },
+      },
+    },
+    MuiFab: {
+      styleOverrides: {
+        root: {
+          position: "fixed",
+          bottom: 20,
+          right: 20,
         },
       },
     },
