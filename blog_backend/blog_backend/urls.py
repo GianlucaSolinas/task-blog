@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from rest_framework.authtoken import views
 
-from blog_backend.views import CustomObtainAuthToken
+from blog_backend.views import CustomObtainAuthToken, current_user
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -25,4 +25,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('posts/', include('blog.urls')),
     path('api-token-auth/', CustomObtainAuthToken.as_view()),
+    path('current-user/', current_user)
 ]
