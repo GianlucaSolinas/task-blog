@@ -22,10 +22,11 @@ import { slugify } from "../utils";
 import { teal } from "@mui/material/colors";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
-import { addPost, getPost } from "../api/posts";
+import { addPost, editPost, getPost } from "../api/posts";
 import { Post } from "../types";
-import { useRemark } from "react-remark";
 import { Info, Preview } from "@mui/icons-material";
+import ContentRenderer from "./ContentRenderer";
+import { useSnackbar } from "notistack";
 
 interface ExitDialogProps {
   open: boolean;
@@ -53,6 +54,8 @@ const ExitDialog = ({ open, onClose, onConfirm }: ExitDialogProps) => {
 
 const PostFormWrapper = () => {
   const { slug } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   let defaultValues: PostFormData = {
     title: "",
@@ -61,6 +64,11 @@ const PostFormWrapper = () => {
 
   const { data, isLoading } = useQuery(["getPost", slug], () => getPost(slug, false), {
     enabled: !!slug,
+    retry: false,
+    onError: (err) => {
+      enqueueSnackbar(`Post not found. Redirected to post list.`, { variant: "warning" });
+      navigate("../posts", { replace: true });
+    },
   });
 
   if (data) {
@@ -83,20 +91,6 @@ interface IPRops {
   postData: Post | null | undefined;
 }
 
-interface ContentPreviewProps {
-  content: string;
-}
-
-const ContentPreview = ({ content }: ContentPreviewProps) => {
-  const [reactContent, setContent] = useRemark();
-
-  useEffect(() => {
-    setContent(content);
-  }, [content, setContent]);
-
-  return reactContent;
-};
-
 const PostForm = ({ defaultValues, postData }: IPRops) => {
   const formTitle = postData ? "Edit post" : "Create a new blog post";
 
@@ -116,19 +110,26 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
   }, [reset, defaultValues]);
 
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
 
-  const mutation = useMutation(addPost);
+  const addPostMutation = useMutation(addPost);
+  const editPostMutation = useMutation(editPost);
 
   const onSubmit = handleSubmit(async (data) => {
+    const slug = slugify(data.title);
+    const formData = { ...data, slug };
+
     if (postData) {
-      console.log("edit", data);
+      await editPostMutation.mutateAsync({ data: formData, id: postData.id });
+      enqueueSnackbar("Post modified successfully!", { autoHideDuration: 1500, variant: "success" });
+      onBack();
     } else {
-      console.log("new", data);
-      let res = await mutation.mutateAsync({ ...data, slug: slugify(data.title) });
-      console.log("new res", res);
+      await addPostMutation.mutateAsync(formData);
+      enqueueSnackbar("Post created successfully!", { autoHideDuration: 1500, variant: "success" });
+      onBack();
     }
   });
 
@@ -155,35 +156,43 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
 
   return (
     <Card>
+      <Backdrop open={addPostMutation.isLoading || editPostMutation.isLoading}>
+        <CircularProgress />
+      </Backdrop>
       <form onSubmit={onSubmit}>
         <CardHeader title={formTitle} />
         <CardContent>
           <Stack direction={{ xs: "column", md: "row" }} gap={2}>
             <Box width={{ md: "50%" }}>
-              <Controller
-                name="title"
-                control={control}
-                rules={{ required: true, pattern: /^[A-Za-z0-9\s]+$/i }}
-                render={({ field }) => <TextField error={!!errors.title} fullWidth label="Title" {...field} />}
-                defaultValue=""
-              />
-              {errors.title && (
-                <React.Fragment>
-                  {errors.title.type === "required" && <FormHelperText error>Title is required!</FormHelperText>}
-                  {errors.title.type === "pattern" && (
-                    <FormHelperText error>Title must not contain special characters!</FormHelperText>
-                  )}
-                </React.Fragment>
-              )}
-              {watchTitle && !errors.title && (
-                <React.Fragment>
-                  <Typography variant="body2">Post URL will look like this</Typography>
-                  <Typography component="code" sx={{ background: teal[700], padding: "1px 4px", color: "white" }}>
-                    <small style={{ opacity: 0.75 }}>{window.location.origin.toString()}/post/</small>
-                    <small style={{ fontWeight: "bold" }}>{slugify(getValues().title)}</small>
-                  </Typography>
-                </React.Fragment>
-              )}
+              <Stack gap={1}>
+                <Controller
+                  name="title"
+                  control={control}
+                  rules={{ required: true, pattern: /^[A-Za-z0-9\s]+$/i }}
+                  render={({ field }) => <TextField error={!!errors.title} fullWidth label="Title" {...field} />}
+                  defaultValue=""
+                />
+                {errors.title && (
+                  <React.Fragment>
+                    {errors.title.type === "required" && <FormHelperText error>Title is required!</FormHelperText>}
+                    {errors.title.type === "pattern" && (
+                      <FormHelperText error>Title must not contain special characters!</FormHelperText>
+                    )}
+                  </React.Fragment>
+                )}
+                {watchTitle && !errors.title && (
+                  <React.Fragment>
+                    <Typography variant="body2">Post URL will look like this</Typography>
+                    <Typography
+                      component="code"
+                      sx={{ background: teal[800], padding: "1px 4px", color: "white", width: "fit-content" }}
+                    >
+                      <small style={{ opacity: 0.75 }}>{window.location.origin.toString()}/post/</small>
+                      <small style={{ fontWeight: "bold" }}>{slugify(getValues().title)}</small>
+                    </Typography>
+                  </React.Fragment>
+                )}
+              </Stack>
             </Box>
             <Box width={{ md: "50%" }}>
               <Controller
@@ -234,10 +243,10 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
         </CardActions>
       </form>
       <ExitDialog open={exitDialogOpen} onClose={onCloseDialog} onConfirm={onBack} />
-      <Dialog fullWidth open={previewDialogOpen} onClose={() => setPreviewDialogOpen(false)}>
+      <Dialog fullWidth maxWidth="xl" open={previewDialogOpen} onClose={() => setPreviewDialogOpen(false)}>
         <DialogTitle>Preview</DialogTitle>
         <DialogContent>
-          <ContentPreview content={getValues().content} />
+          <ContentRenderer content={getValues().content} />
         </DialogContent>
       </Dialog>
     </Card>

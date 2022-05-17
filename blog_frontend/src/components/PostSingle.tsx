@@ -9,22 +9,20 @@ import {
   Stack,
   Typography,
   Skeleton,
+  Chip,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { format } from "date-fns";
-import React, { useContext } from "react";
+import { differenceInMinutes, format } from "date-fns";
+import React from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPost } from "../api/posts";
 import ReportIcon from "@mui/icons-material/Report";
 import { ArrowBack } from "@mui/icons-material";
 import PostSubheader from "./PostSubheader";
-import { useSnackbar } from "notistack";
-import { AuthContext } from "../context/AuthContext";
+import ContentRenderer from "./ContentRenderer";
 
 const PostSingle = () => {
-  const { currentUser } = useContext(AuthContext);
-  const { enqueueSnackbar } = useSnackbar();
   const { slug } = useParams();
   const navigate = useNavigate();
   const { isLoading, data, error } = useQuery("getPost", () => getPost(slug, true), {
@@ -45,10 +43,10 @@ const PostSingle = () => {
     );
   }
 
+  let hasBeenUpdated = false;
+
   if (data) {
-    if (currentUser.id !== data.author.id) {
-      enqueueSnackbar("You don't have the right permissions to edit post. Redirecting...");
-    }
+    hasBeenUpdated = differenceInMinutes(new Date(data.updated_at), new Date(data.created_at)) >= 1;
   }
 
   return (
@@ -61,9 +59,25 @@ const PostSingle = () => {
       </Backdrop>
       {data ? (
         <Card>
-          <CardHeader title={data.title} subheader={<PostSubheader post={data} />}></CardHeader>
+          <CardHeader
+            titleTypographyProps={{ variant: "h3" }}
+            title={data.title}
+            subheader={<PostSubheader post={data} />}
+          ></CardHeader>
           <CardContent>
-            <Typography variant="body1">{data.content}</Typography>
+            <Box>
+              {hasBeenUpdated && (
+                <Chip
+                  size="small"
+                  color="secondary"
+                  variant="outlined"
+                  label={<em>Last edit on {format(new Date(data.updated_at), "MMMM do yyyy HH:mm")}</em>}
+                />
+              )}
+            </Box>
+            <Box>
+              <ContentRenderer content={data.content} />
+            </Box>
           </CardContent>
         </Card>
       ) : (
