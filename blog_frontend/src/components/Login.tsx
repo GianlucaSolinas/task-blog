@@ -1,11 +1,10 @@
+import React from "react";
 import { Box, Button, Stack, Paper, TextField, Typography } from "@mui/material";
-import React, { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
-  const { onLogin, token, currentUser } = useContext(AuthContext);
+  const { onLogin } = useAuth();
   const {
     control,
     handleSubmit,
@@ -16,10 +15,6 @@ const Login = () => {
   const onSubmit = async (data: any) => {
     await onLogin(data);
   };
-
-  if (window.localStorage.getItem("blog_auth_token")) {
-    window.localStorage.removeItem("blog_auth_token");
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

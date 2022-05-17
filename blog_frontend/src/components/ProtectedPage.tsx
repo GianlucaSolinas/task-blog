@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import useAuth from "../hooks/useAuth";
 
 const ProtectedPage = ({ children }: any) => {
-  const { token } = useContext(AuthContext);
+  const { token } = useAuth();
 
   if (!token) {
     return <Navigate to="/login" replace />;

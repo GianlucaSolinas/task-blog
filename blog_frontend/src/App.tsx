@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import routes from "./routes";
 import ProtectedPage from "./components/ProtectedPage";
 import { SnackbarProvider } from "notistack";
+import NotFound from "./components/NotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,13 +20,12 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <SnackbarProvider>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
+    <SnackbarProvider autoHideDuration={1500}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
           <BlogAppBar />
           <div className="App">
             <Routes>
-              <Route path="" element={<Navigate to="login" replace />}></Route>
               {routes.map(({ path, element, isProtected }) => {
                 if (isProtected) {
                   return <Route path={path} element={<ProtectedPage>{element}</ProtectedPage>} />;
@@ -33,10 +33,11 @@ function App() {
                   return <Route path={path} element={element} />;
                 }
               })}
+              <Route path={"*"} element={<NotFound />} />
             </Routes>
           </div>
-        </QueryClientProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </SnackbarProvider>
   );
 }

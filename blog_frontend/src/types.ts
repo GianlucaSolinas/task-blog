@@ -3,6 +3,7 @@ interface User {
   username: string;
   first_name: string;
   last_name: string;
+  is_staff: boolean;
 }
 
 interface Post {
@@ -22,9 +23,14 @@ interface PostInput {
   slug: string;
 }
 
+interface EditPostInput {
+  id: string;
+  data: PostInput;
+}
+
 interface LoginInput {
   username: string;
   password: string;
 }
 
-export type { Post, User, PostInput, LoginInput };
+export type { Post, User, PostInput, LoginInput, EditPostInput };

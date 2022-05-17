@@ -1,13 +1,13 @@
 import { useSnackbar } from "notistack";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../api/auth";
+import { getCurrentUser, login } from "../api/auth";
 import { User } from "../types";
 
 const AuthContext = React.createContext<any>(null);
 
 const AuthProvider = ({ children }: any) => {
-  const [token, setToken] = React.useState<string | null>(null);
+  const [token, setToken] = React.useState<string | null>(() => window.localStorage.getItem("blog_auth_token") || null);
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -20,7 +20,7 @@ const AuthProvider = ({ children }: any) => {
       setCurrentUser(user);
       window.localStorage.setItem("blog_auth_token", token);
       navigate("../posts/", { replace: true });
-      enqueueSnackbar("Logged in successfully!", { autoHideDuration: 1500 });
+      enqueueSnackbar("Logged in successfully!", { variant: "success" });
     } catch (error) {
       console.log(error);
     }
@@ -30,8 +30,16 @@ const AuthProvider = ({ children }: any) => {
     setToken(null);
     window.localStorage.removeItem("blog_auth_token");
     navigate("../login", { replace: true });
-    enqueueSnackbar("Logged out successfully!", { autoHideDuration: 1500 });
+    enqueueSnackbar("Logged out successfully!", { variant: "success" });
   };
+
+  useEffect(() => {
+    if (token) {
+      getCurrentUser().then((res) => {
+        setCurrentUser(res);
+      });
+    }
+  }, [token]);
 
   const contextValue: any = {
     token,
