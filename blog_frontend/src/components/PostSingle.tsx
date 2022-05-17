@@ -60,7 +60,7 @@ const PostSingle = () => {
       {data ? (
         <Card>
           <CardHeader
-            titleTypographyProps={{ variant: "h3" }}
+            titleTypographyProps={{ variant: "h5" }}
             title={data.title}
             subheader={<PostSubheader post={data} />}
           ></CardHeader>
@@ -75,7 +75,7 @@ const PostSingle = () => {
                 />
               )}
             </Box>
-            <Box>
+            <Box overflow="auto">
               <ContentRenderer content={data.content} />
             </Box>
           </CardContent>
