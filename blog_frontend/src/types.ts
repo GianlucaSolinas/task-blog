@@ -1,4 +1,5 @@
 interface User {
+  id: number;
   username: string;
   first_name: string;
   last_name: string;
@@ -15,4 +16,15 @@ interface Post {
   author: User;
 }
 
-export type { Post, User };
+interface PostInput {
+  title: string;
+  content: string;
+  slug: string;
+}
+
+interface LoginInput {
+  username: string;
+  password: string;
+}
+
+export type { Post, User, PostInput, LoginInput };

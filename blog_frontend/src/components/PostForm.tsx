@@ -7,13 +7,11 @@ import {
   CardContent,
   CardHeader,
   CircularProgress,
-  Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormHelperText,
-  Paper,
   Stack,
   TextField,
   Typography,
@@ -23,9 +21,11 @@ import { useForm, Controller } from "react-hook-form";
 import { slugify } from "../utils";
 import { teal } from "@mui/material/colors";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { getPost } from "../api/posts";
+import { useMutation, useQuery } from "react-query";
+import { addPost, getPost } from "../api/posts";
 import { Post } from "../types";
+import { useRemark } from "react-remark";
+import { Info, Preview } from "@mui/icons-material";
 
 interface ExitDialogProps {
   open: boolean;
@@ -83,9 +83,23 @@ interface IPRops {
   postData: Post | null | undefined;
 }
 
+interface ContentPreviewProps {
+  content: string;
+}
+
+const ContentPreview = ({ content }: ContentPreviewProps) => {
+  const [reactContent, setContent] = useRemark();
+
+  useEffect(() => {
+    setContent(content);
+  }, [content, setContent]);
+
+  return reactContent;
+};
+
 const PostForm = ({ defaultValues, postData }: IPRops) => {
   const formTitle = postData ? "Edit post" : "Create a new blog post";
-  console.log("defaultValues", defaultValues);
+
   const {
     control,
     watch,
@@ -104,10 +118,22 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
   const navigate = useNavigate();
 
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
+  const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const mutation = useMutation(addPost);
+
+  const onSubmit = handleSubmit(async (data) => {
+    if (postData) {
+      console.log("edit", data);
+    } else {
+      console.log("new", data);
+      let res = await mutation.mutateAsync({ ...data, slug: slugify(data.title) });
+      console.log("new res", res);
+    }
+  });
 
   const watchTitle = watch("title");
+  const watchContent = watch("content");
 
   const onBack = () => {
     navigate("/posts");
@@ -169,13 +195,32 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
                 )}
                 defaultValue=""
               />
-              {errors.content && (
-                <React.Fragment>
-                  {errors.content.type === "required" && (
-                    <FormHelperText error>Please write something here!</FormHelperText>
+              <Stack direction="row" justifyContent="space-between">
+                <Box>
+                  {errors.content && (
+                    <React.Fragment>
+                      {errors.content.type === "required" && (
+                        <FormHelperText error>Please write something here!</FormHelperText>
+                      )}
+                    </React.Fragment>
                   )}
-                </React.Fragment>
-              )}
+                  <FormHelperText margin="dense">
+                    <Stack direction="row" gap={0.5}>
+                      <Info fontSize="small" /> Markdown supported
+                    </Stack>
+                  </FormHelperText>
+                </Box>
+                {watchContent && (
+                  <Button
+                    size="small"
+                    variant="text"
+                    startIcon={<Preview />}
+                    onClick={() => setPreviewDialogOpen(true)}
+                  >
+                    Preview
+                  </Button>
+                )}
+              </Stack>
             </Box>
           </Stack>
         </CardContent>
@@ -189,6 +234,12 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
         </CardActions>
       </form>
       <ExitDialog open={exitDialogOpen} onClose={onCloseDialog} onConfirm={onBack} />
+      <Dialog fullWidth open={previewDialogOpen} onClose={() => setPreviewDialogOpen(false)}>
+        <DialogTitle>Preview</DialogTitle>
+        <DialogContent>
+          <ContentPreview content={getValues().content} />
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

@@ -14,7 +14,7 @@ import {
   Container,
 } from "@mui/material";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import { getPosts } from "../api/posts";
 import { Post } from "../types";
@@ -22,8 +22,10 @@ import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied
 import PostSubheader from "./PostSubheader";
 import { Delete, Edit, Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const PostsList = () => {
+  const { currentUser } = useContext(AuthContext);
   const { isLoading, data, isFetching } = useQuery("getPosts", getPosts);
   const navigate = useNavigate();
 
@@ -49,20 +51,22 @@ const PostsList = () => {
                     <Button onClick={() => goTo(`post/${post.slug}`)} variant="contained">
                       Read
                     </Button>
-                    <Stack direction="row" gap={1} width="100%" justifyContent="flex-end">
-                      <Button
-                        startIcon={<Edit />}
-                        onClick={() => goTo(`posts/edit/${post.slug}`)}
-                        variant="contained"
-                        color="info"
-                        size="small"
-                      >
-                        Edit
-                      </Button>
-                      <Button startIcon={<Delete />} variant="contained" color="error" size="small">
-                        Delete
-                      </Button>
-                    </Stack>
+                    {currentUser.id === post.author.id && (
+                      <Stack direction="row" gap={1} width="100%" justifyContent="flex-end">
+                        <Button
+                          startIcon={<Edit />}
+                          onClick={() => goTo(`posts/edit/${post.slug}`)}
+                          variant="contained"
+                          color="info"
+                          size="small"
+                        >
+                          Edit
+                        </Button>
+                        <Button startIcon={<Delete />} variant="contained" color="error" size="small">
+                          Delete
+                        </Button>
+                      </Stack>
+                    )}
                   </CardActions>
                 </Card>
               </Grid>

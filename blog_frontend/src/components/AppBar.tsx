@@ -1,22 +1,34 @@
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useLocation } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { Logout } from "@mui/icons-material";
 
 export default function BlogAppBar() {
+  const { pathname } = useLocation();
+  const { currentUser, onLogout } = useContext(AuthContext);
+
+  if (pathname.split("/")[1] === "login") {
+    return <></>;
+  }
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <React.Fragment>
+      <AppBar position="sticky">
         <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Blog
           </Typography>
-          <Button color="inherit">Login</Button>
+          {currentUser && currentUser.username}
+          <Tooltip title="Logout">
+            <IconButton size="large" edge="end" color="inherit" aria-label="logout">
+              <Logout onClick={onLogout} />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
-    </Box>
+    </React.Fragment>
   );
 }
