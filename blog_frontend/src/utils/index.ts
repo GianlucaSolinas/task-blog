@@ -23,10 +23,10 @@ function getApiURL(): string {
 }
 
 function getDefaultHeaders(): AxiosRequestHeaders {
+  const token = window.localStorage.getItem("blog_auth_token");
+  const isTokenValid = token && token.length > 0;
   return {
-    Authorization: `Token ${window.localStorage.getItem("blog_auth_token") || ""}`,
-    // "Access-Control-Allow-Origin": window.location.origin.toString(),
-    // "Access-Control-Allow-Headers": "*",
+    ...(isTokenValid && { Authorization: `Token ${window.localStorage.getItem("blog_auth_token") || ""}` }),
   };
 }
 
