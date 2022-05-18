@@ -6,7 +6,11 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'blog_backend.settings')
+    # on production, this must be blog_backend.settings.production
+    if 'ON_HEROKU' in os.environ:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'blog_backend.settings.production')
+    else:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'blog_backend.settings.base')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

@@ -13,3 +13,7 @@
 ## Redoc
 
 `hostname:/redoc`
+
+### Push to Heroku
+
+`git subtree --prefix blog_backend push heroku master`
