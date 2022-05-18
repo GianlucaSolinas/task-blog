@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <SnackbarProvider autoHideDuration={1500}>
+    <SnackbarProvider autoHideDuration={2500}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <BlogAppBar />

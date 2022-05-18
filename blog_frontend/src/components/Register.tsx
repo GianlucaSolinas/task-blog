@@ -31,7 +31,6 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
     reset,
     watch,
   } = useForm({
@@ -161,7 +160,7 @@ const Register = () => {
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography
                 variant="caption"
-                fontWeight={getValues().is_staff ? "100" : "bold"}
+                fontWeight={watchAll.is_staff ? "100" : "bold"}
                 onClick={() => setValue("is_staff", false)}
                 sx={{ cursor: "pointer" }}
               >
@@ -170,11 +169,11 @@ const Register = () => {
               <Controller
                 name="is_staff"
                 control={control}
-                render={({ field }) => <Switch color="primary" checked={getValues().is_staff} {...field} />}
+                render={({ field }) => <Switch color="primary" checked={watchAll.is_staff} {...field} />}
               />
               <Typography
                 variant="caption"
-                fontWeight={getValues().is_staff ? "bold" : "100"}
+                fontWeight={watchAll.is_staff ? "bold" : "100"}
                 onClick={() => setValue("is_staff", true)}
                 sx={{ cursor: "pointer" }}
               >
@@ -182,7 +181,7 @@ const Register = () => {
               </Typography>
             </Stack>
             <FormHelperText>
-              {getValues().is_staff ? "Writer can add, edit and remove posts" : "Reader can only view posts"}
+              {watchAll.is_staff ? "Writer can add, edit and remove posts" : "Reader can only view posts"}
             </FormHelperText>
             <Box></Box>
             <Box width={{ md: "50%" }}>

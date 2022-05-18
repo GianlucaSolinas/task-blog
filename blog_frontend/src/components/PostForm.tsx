@@ -124,11 +124,11 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
 
     if (postData) {
       await editPostMutation.mutateAsync({ data: formData, id: postData.id });
-      enqueueSnackbar("Post modified successfully!", { autoHideDuration: 1500, variant: "success" });
+      enqueueSnackbar("Post modified successfully!", { variant: "success" });
       onBack();
     } else {
       await addPostMutation.mutateAsync(formData);
-      enqueueSnackbar("Post created successfully!", { autoHideDuration: 1500, variant: "success" });
+      enqueueSnackbar("Post created successfully!", { variant: "success" });
       onBack();
     }
   });
