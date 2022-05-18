@@ -34,6 +34,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiCardHeader: {
+      styleOverrides: {
+        title: {
+          fontFamily: "Raleway",
+        },
+      },
+    },
   },
 });
 

@@ -18,6 +18,7 @@ import {
   useMediaQuery,
   IconButton,
   CardContent,
+  Tooltip,
 } from "@mui/material";
 
 import React, { useState } from "react";
@@ -30,6 +31,8 @@ import { Delete, Edit, Add, ReadMore, PersonAdd } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useCurrentUser from "../hooks/useCurrentUser";
+import ContentRenderer from "./ContentRenderer";
+import { grey } from "@mui/material/colors";
 
 const PostsList = () => {
   const theme = useTheme();
@@ -70,23 +73,33 @@ const PostsList = () => {
               <Grid item xs={12} md={6} key={post.id}>
                 <Card>
                   <CardHeader
-                    titleTypographyProps={{ fontSize: 30, fontWeight: "bold", color: "primary.dark" }}
+                    titleTypographyProps={{ fontSize: 30, fontWeight: "bold" }}
                     title={post.title}
                     subheader={<PostSubheader post={post} />}
                   />
                   <CardContent>
-                    <Typography variant="caption">{`${post.content.substring(0, 50)}...`}</Typography>
+                    <Tooltip title="Read more">
+                      <Paper
+                        elevation={0}
+                        sx={{
+                          background: grey[200],
+                          opacity: 0.5,
+                          padding: "8px",
+                          "&:hover": { cursor: "pointer", opacity: 0.8 },
+                          overflow: "auto",
+                          fontSize: 10,
+                        }}
+                        onClick={() => goTo(`post/${post.slug}`)}
+                      >
+                        <ContentRenderer content={`${post.content.substring(0, 250)}...`} />
+                      </Paper>
+                    </Tooltip>
                   </CardContent>
                   <CardActions>
-                    {matchMobile ? (
-                      <IconButton>
-                        <ReadMore onClick={() => goTo(`post/${post.slug}`)} />
-                      </IconButton>
-                    ) : (
-                      <Button onClick={() => goTo(`post/${post.slug}`)} variant="contained">
-                        Read
-                      </Button>
-                    )}
+                    <IconButton>
+                      <ReadMore onClick={() => goTo(`post/${post.slug}`)} />
+                    </IconButton>
+
                     {currentUser?.id === post.author.id && (
                       <Stack direction="row" gap={1} width="100%" justifyContent="flex-end">
                         {matchMobile ? (

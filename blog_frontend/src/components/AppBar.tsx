@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Chip, CircularProgress, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, Avatar, Chip, Skeleton, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
@@ -21,11 +21,11 @@ export default function BlogAppBar() {
     <React.Fragment>
       <AppBar position="sticky">
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Blog Task Greencast
           </Typography>
           {isLoading ? (
-            <CircularProgress />
+            <Skeleton variant="rectangular" width={100} />
           ) : (
             <Chip avatar={<Avatar>{authorShownName.charAt(0)}</Avatar>} color="primary" label={authorShownName} />
           )}

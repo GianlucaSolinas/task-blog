@@ -29,7 +29,9 @@ const Login = () => {
         }}
       >
         <Stack height="100%" gap={2} direction="column" justifyContent="center" alignItems="center" padding={4}>
-          <Typography variant="h3">LOGIN</Typography>
+          <Typography variant="h3" fontFamily="Raleway">
+            LOGIN
+          </Typography>
           <Stack direction="column" alignItems="center" gap={1}>
             <Box width={{ md: "100%" }}>
               <Controller

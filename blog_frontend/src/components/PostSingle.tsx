@@ -10,6 +10,8 @@ import {
   Typography,
   Skeleton,
   Chip,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { differenceInMinutes, format } from "date-fns";
@@ -25,6 +27,9 @@ import ContentRenderer from "./ContentRenderer";
 const PostSingle = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const matchMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const { isLoading, data, error } = useQuery("getPost", () => getPost(slug, true), {
     retry: false,
   });
@@ -60,21 +65,21 @@ const PostSingle = () => {
       {data ? (
         <Card>
           <CardHeader
-            titleTypographyProps={{ variant: "h5" }}
+            titleTypographyProps={{ variant: matchMobile ? "h4" : "h3" }}
             title={data.title}
             subheader={<PostSubheader post={data} />}
           ></CardHeader>
           <CardContent>
-            <Box>
-              {hasBeenUpdated && (
+            {hasBeenUpdated && (
+              <Box>
                 <Chip
                   size="small"
                   color="secondary"
                   variant="outlined"
                   label={<em>Last edit on {format(new Date(data.updated_at), "MMMM do yyyy HH:mm")}</em>}
                 />
-              )}
-            </Box>
+              </Box>
+            )}
             <Box overflow="auto">
               <ContentRenderer content={data.content} />
             </Box>
