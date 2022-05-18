@@ -25,7 +25,7 @@ function getApiURL(): string {
 function getDefaultHeaders(): AxiosRequestHeaders {
   return {
     Authorization: `Token ${window.localStorage.getItem("blog_auth_token") || ""}`,
-    "Access-Control-Allow-Origin": window.location.origin.toString(),
+    // "Access-Control-Allow-Origin": window.location.origin.toString(),
     "Access-Control-Allow-Headers": "*",
   };
 }
