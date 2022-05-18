@@ -1,15 +1,16 @@
 import axios from "axios";
 import { LoginInput, User, RegisterInput } from "../types";
+import { getApiURL } from "../utils";
 
 async function login(data: LoginInput): Promise<any> {
   return await (
-    await axios.post("http://127.0.0.1:8000/api-token-auth/", data)
+    await axios.post(`${getApiURL()}/api-token-auth/`, data)
   ).data;
 }
 
 async function getCurrentUser(): Promise<User> {
   return await (
-    await axios.get("http://127.0.0.1:8000/current-user/", {
+    await axios.get(`${getApiURL()}/current-user/`, {
       headers: {
         Authorization: `Token ${window.localStorage.getItem("blog_auth_token") || ""}`,
       },
@@ -18,7 +19,7 @@ async function getCurrentUser(): Promise<User> {
 }
 
 async function registerUser(data: RegisterInput): Promise<User> {
-  return await axios.post("http://127.0.0.1:8000/register/", data);
+  return await axios.post(`${getApiURL()}/register/`, data);
 }
 
 export { login, getCurrentUser, registerUser };
