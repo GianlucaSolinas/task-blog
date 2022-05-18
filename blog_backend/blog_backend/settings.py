@@ -26,10 +26,10 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'django-insecure-7aomqa)oqah3gwn0t6yxjb@9#r71ftvci9!y52c1ocita)v(gl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'ON_HEROKU' in os.environ:
-    DEBUG = False
-else:
-    DEBUG = True
+# if 'ON_HEROKU' in os.environ:
+#     DEBUG = False
+# else:
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
