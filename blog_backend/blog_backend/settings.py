@@ -31,7 +31,7 @@ else:
     DEBUG = True
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'pacific-ridge-81267.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://pacific-ridge-81267.herokuapp.com']
 
 # Application definition
 
@@ -67,7 +67,6 @@ MIDDLEWARE = [
 ]
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
@@ -170,4 +169,5 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 django_heroku.settings(locals())
