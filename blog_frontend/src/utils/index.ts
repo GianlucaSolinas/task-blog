@@ -26,7 +26,7 @@ function getDefaultHeaders(): AxiosRequestHeaders {
   const token = window.localStorage.getItem("blog_auth_token");
   const isTokenValid = token && token.length > 0;
   return {
-    ...(isTokenValid && { Authorization: `Token ${window.localStorage.getItem("blog_auth_token") || ""}` }),
+    ...(isTokenValid && { Authorization: `Token ${token}` }),
   };
 }
 
