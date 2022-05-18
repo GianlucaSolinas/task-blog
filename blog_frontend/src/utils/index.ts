@@ -26,6 +26,8 @@ function getDefaultHeaders(): AxiosRequestHeaders {
   return {
     Authorization: `Token ${window.localStorage.getItem("blog_auth_token") || ""}`,
     "Access-Control-Allow-Origin": window.location.origin.toString(),
+    "Access-Control-Allow-Headers":
+      "accept, accept-encoding, authorization, content-type, dnt, origin, user-agent, x-csrftoken, x-requested-with",
   };
 }
 
