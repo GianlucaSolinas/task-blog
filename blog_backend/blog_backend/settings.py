@@ -25,10 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7aomqa)oqah3gwn0t6yxjb@9#r71ftvci9!y52c1ocita)v(gl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if 'ON_HEROKU' in os.environ:
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'pacific-ridge-81267.herokuapp.com']
 
 # Application definition
 
@@ -62,6 +65,13 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -132,7 +142,7 @@ REST_FRAMEWORK = {
 
 
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': True
+    'USE_SESSION_AUTH': False
 }
 
 
