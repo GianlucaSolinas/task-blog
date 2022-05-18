@@ -14,14 +14,13 @@ const PostSubheader = ({ post }: IPRops) => {
 
   return (
     <Stack mt={1} direction={{ sm: "row", xs: "column" }} gap={1} alignItems="baseline">
-      <Chip size="small" color="primary" icon={<Person />} label={authorShownName} />
+      <Chip size="small" icon={<Person />} label={authorShownName} />
       <Chip
         size="small"
-        color="secondary"
         icon={<CalendarMonth />}
         label={`${format(new Date(post.created_at), "MMMM do yyyy HH:mm")}`}
       />
-      <Chip size="small" color="info" icon={<Visibility />} label={`${post.views} views`} />
+      <Chip size="small" icon={<Visibility />} label={`${post.views} views`} />
     </Stack>
   );
 };

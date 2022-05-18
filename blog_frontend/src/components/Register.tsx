@@ -33,7 +33,16 @@ const Register = () => {
     setValue,
     getValues,
     reset,
-  } = useForm();
+    watch,
+  } = useForm({
+    defaultValues: {
+      username: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+      is_staff: false,
+    },
+  });
 
   const handleError = (resData: any) => {
     const arr = Object.values(resData);
@@ -57,6 +66,8 @@ const Register = () => {
       }
     }
   };
+
+  const watchAll = watch();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -118,6 +129,7 @@ const Register = () => {
               variant="caption"
               fontWeight={getValues().is_staff ? "100" : "bold"}
               onClick={() => setValue("is_staff", false)}
+              sx={{ cursor: "pointer" }}
             >
               Reader
             </Typography>
@@ -130,6 +142,7 @@ const Register = () => {
               variant="caption"
               fontWeight={getValues().is_staff ? "bold" : "100"}
               onClick={() => setValue("is_staff", true)}
+              sx={{ cursor: "pointer" }}
             >
               Writer
             </Typography>

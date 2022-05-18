@@ -17,6 +17,7 @@ import {
   useTheme,
   useMediaQuery,
   IconButton,
+  CardContent,
 } from "@mui/material";
 
 import React, { useState } from "react";
@@ -68,7 +69,14 @@ const PostsList = () => {
             return (
               <Grid item xs={12} md={6} key={post.id}>
                 <Card>
-                  <CardHeader title={post.title} subheader={<PostSubheader post={post} />} />
+                  <CardHeader
+                    titleTypographyProps={{ fontSize: 30, fontWeight: "bold", color: "primary.dark" }}
+                    title={post.title}
+                    subheader={<PostSubheader post={post} />}
+                  />
+                  <CardContent>
+                    <Typography variant="caption">{`${post.content.substring(0, 50)}...`}</Typography>
+                  </CardContent>
                   <CardActions>
                     {matchMobile ? (
                       <IconButton>
@@ -102,9 +110,9 @@ const PostsList = () => {
                           </IconButton>
                         ) : (
                           <Button
-                            startIcon={<Delete />}
-                            variant="contained"
-                            color="error"
+                            startIcon={<Delete color="secondary" />}
+                            variant="outlined"
+                            color="primary"
                             size="small"
                             onClick={() => setDeleteConfirmation(post.id)}
                           >

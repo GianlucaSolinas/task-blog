@@ -21,8 +21,8 @@ export default function BlogAppBar() {
     <React.Fragment>
       <AppBar position="sticky">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Blog
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+            Blog Task Greencast
           </Typography>
           {isLoading ? (
             <CircularProgress />
