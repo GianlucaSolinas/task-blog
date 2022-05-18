@@ -4,7 +4,9 @@ import { getApiURL, getDefaultHeaders } from "../utils";
 
 async function login(data: LoginInput): Promise<any> {
   return await (
-    await axios.post(`${getApiURL()}/api-token-auth/`, data)
+    await axios.post(`${getApiURL()}/api-token-auth/`, data, {
+      headers: getDefaultHeaders(),
+    })
   ).data;
 }
 
