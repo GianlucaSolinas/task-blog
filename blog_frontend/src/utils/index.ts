@@ -1,3 +1,4 @@
+import { AxiosRequestHeaders } from "axios";
 import { User } from "../types";
 
 function slugify(str: string = ""): string {
@@ -21,4 +22,11 @@ function getApiURL(): string {
   }
 }
 
-export { slugify, getAuthorShownName, getApiURL };
+function getDefaultHeaders(): AxiosRequestHeaders {
+  return {
+    Authorization: `Token ${window.localStorage.getItem("blog_auth_token") || ""}`,
+    "Access-Control-Allow-Origin": window.location.origin.toString(),
+  };
+}
+
+export { slugify, getAuthorShownName, getApiURL, getDefaultHeaders };
