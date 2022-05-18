@@ -5,7 +5,7 @@ name: Deploy to Firebase Hosting on merge
 "on":
   push:
     paths:
-      - "blog_frontend"
+      - 'blog_frontend/'
     branches:
       - main
 jobs:
