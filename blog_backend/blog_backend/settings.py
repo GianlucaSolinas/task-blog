@@ -32,7 +32,7 @@ else:
     DEBUG = True
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://pacific-ridge-81267.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
 
 # Application definition
 
