@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useRemark } from "react-remark";
 
 interface ContentPreviewProps {
@@ -8,7 +8,7 @@ interface ContentPreviewProps {
 const ContentRenderer = ({ content }: ContentPreviewProps) => {
   const [reactContent, setContent] = useRemark();
 
-  useEffect(() => {
+  React.useEffect(() => {
     setContent(content);
   }, [content, setContent]);
 

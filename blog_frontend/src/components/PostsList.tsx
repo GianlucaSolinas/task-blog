@@ -25,7 +25,7 @@ import { deletePost, getPosts } from "../api/posts";
 import { Post } from "../types";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 import PostSubheader from "./PostSubheader";
-import { Delete, Edit, Add, ReadMore } from "@mui/icons-material";
+import { Delete, Edit, Add, ReadMore, PersonAdd } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useCurrentUser from "../hooks/useCurrentUser";
@@ -54,14 +54,13 @@ const PostsList = () => {
       } catch (error) {
         setDeleteConfirmation(null);
         enqueueSnackbar("Something went wrong.", { variant: "error" });
-        console.log(error);
       }
     }
   };
 
   return (
     <Box>
-      <Grid container gap={2} justifyContent={{ md: "center", xs: "space-between" }} mb={5}>
+      <Grid container gap={2} justifyContent={{ md: "center", xs: "space-between" }} mb={{ xs: 10, md: 5 }}>
         {isLoading || isFetching ? (
           <LinearProgress />
         ) : data && data.length ? (
@@ -91,7 +90,7 @@ const PostsList = () => {
                             startIcon={<Edit />}
                             onClick={() => goTo(`posts/edit/${post.slug}`)}
                             variant="contained"
-                            color="info"
+                            color="secondary"
                             size="small"
                           >
                             Edit
@@ -140,17 +139,35 @@ const PostsList = () => {
         )}
       </Grid>
       {currentUser?.is_staff && (
-        <Fab color="primary" size="medium" variant="extended" onClick={() => goTo("posts/add")}>
-          <Add sx={{ mr: 1 }} />
-          New post
-        </Fab>
+        <Stack direction={{ xs: "row", md: "column" }} gap={1} className="FabContainer">
+          <Fab
+            color="secondary"
+            size="medium"
+            variant={matchMobile ? "circular" : "extended"}
+            onClick={() => goTo("register")}
+          >
+            <PersonAdd sx={{ mr: matchMobile ? 0 : 1 }} />
+            {matchMobile ? "" : "New user"}
+          </Fab>
+          <Fab
+            color="primary"
+            size="medium"
+            variant={matchMobile ? "circular" : "extended"}
+            onClick={() => goTo("posts/add")}
+          >
+            <Add sx={{ mr: matchMobile ? 0 : 1 }} />
+            {matchMobile ? "" : "New post"}
+          </Fab>
+        </Stack>
       )}
       <Dialog open={!!deleteConfirmation}>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>The post will be permanently deleted.</DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteConfirmation(null)}>Cancel</Button>
-          <Button onClick={onPostDelete}>confirm</Button>
+          <Button variant="contained" onClick={onPostDelete}>
+            confirm
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

@@ -163,13 +163,15 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
         <CardHeader title={formTitle} />
         <CardContent>
           <Stack direction={{ xs: "column", md: "row" }} gap={2}>
-            <Box width={{ md: "50%" }}>
+            <Box width={{ md: "40%" }}>
               <Stack gap={1}>
                 <Controller
                   name="title"
                   control={control}
                   rules={{ required: true, pattern: /^[A-Za-z0-9\s]+$/i }}
-                  render={({ field }) => <TextField error={!!errors.title} fullWidth label="Title" {...field} />}
+                  render={({ field }) => (
+                    <TextField required error={!!errors.title} fullWidth label="Title" {...field} />
+                  )}
                   defaultValue=""
                 />
                 {errors.title && (
@@ -194,13 +196,21 @@ const PostForm = ({ defaultValues, postData }: IPRops) => {
                 )}
               </Stack>
             </Box>
-            <Box width={{ md: "50%" }}>
+            <Box width={{ md: "60%" }}>
               <Controller
                 name="content"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
-                  <TextField error={!!errors.content} fullWidth label="Content" multiline minRows="10" {...field} />
+                  <TextField
+                    required
+                    error={!!errors.content}
+                    fullWidth
+                    label="Content"
+                    multiline
+                    minRows="10"
+                    {...field}
+                  />
                 )}
                 defaultValue=""
               />
