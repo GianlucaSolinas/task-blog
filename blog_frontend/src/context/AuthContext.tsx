@@ -28,6 +28,7 @@ const AuthProvider = ({ children }: any) => {
 
   const handleLogout = () => {
     setToken(null);
+    setCurrentUser(null);
     window.localStorage.removeItem("blog_auth_token");
     navigate("../login", { replace: true });
     enqueueSnackbar("Logged out successfully!", { variant: "success" });

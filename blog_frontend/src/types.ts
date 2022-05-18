@@ -33,4 +33,12 @@ interface LoginInput {
   password: string;
 }
 
-export type { Post, User, PostInput, LoginInput, EditPostInput };
+interface RegisterInput {
+  username: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  is_staff: boolean;
+}
+
+export type { Post, User, PostInput, LoginInput, EditPostInput, RegisterInput };

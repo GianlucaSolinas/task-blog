@@ -26,6 +26,7 @@ function App() {
           <BlogAppBar />
           <div className="App">
             <Routes>
+              <Route path="/" element={<Navigate to="/posts" replace />} />
               {routes.map(({ path, element, isProtected }) => {
                 if (isProtected) {
                   return <Route path={path} element={<ProtectedPage>{element}</ProtectedPage>} />;

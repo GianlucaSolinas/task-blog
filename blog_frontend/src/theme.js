@@ -6,6 +6,8 @@ const theme = createTheme({
   palette: {
     primary: {
       main: teal[400],
+      dark: teal[800],
+      light: teal[200],
     },
     secondary: {
       main: "#19857b",
@@ -25,12 +27,10 @@ const theme = createTheme({
         },
       },
     },
-    MuiFab: {
+    MuiSwitch: {
       styleOverrides: {
-        root: {
-          position: "fixed",
-          bottom: 20,
-          right: 20,
+        thumb: {
+          border: `1px solid ${teal[400]}`,
         },
       },
     },

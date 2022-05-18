@@ -3,6 +3,7 @@ import Login from "../components/Login";
 import PostFormWrapper from "../components/PostForm";
 import PostSingle from "../components/PostSingle";
 import PostsList from "../components/PostsList";
+import Register from "../components/Register";
 
 interface Route {
   path: string;
@@ -14,6 +15,11 @@ const routes: Route[] = [
   {
     path: "login",
     element: <Login />,
+    isProtected: false,
+  },
+  {
+    path: "register",
+    element: <Register />,
     isProtected: false,
   },
   {
