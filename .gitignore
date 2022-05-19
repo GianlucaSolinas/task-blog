@@ -1,10 +1,12 @@
-# frontend
+##### frontend
 
 # dependencies
 .blog_frontend/node_modules
 
 # production
 .blog_frontend/build
+.blog_frontend/.firebase
+*.cache
 
 # misc
 .DS_Store
@@ -17,6 +19,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+##### backend
 
 # Django #
 *.log
@@ -25,6 +28,10 @@ yarn-error.log*
 __pycache__
 db.sqlite3
 media
+
+# coverage.py files
+.coverage
+.coveragerc
 
 # Backup files # 
 *.bak 
@@ -40,4 +47,4 @@ env/
 venv/ 
 ENV/ 
 env.bak/ 
-venv.bak/ 
+venv.bak/

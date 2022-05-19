@@ -1,19 +1,57 @@
-- Activate virtual env
-  `source ~/env/bin/activate`
+# Task Blog Backend
 
-- Run server
-  `python manage.py runserver`
+## API Root URL
 
-# API Docs
+https://pacific-ridge-81267.herokuapp.com/
+
+# OpenAPI Docs
 
 ## Swagger
 
-`hostname:/swagger`
+https://pacific-ridge-81267.herokuapp.com/swagger
 
 ## Redoc
 
-`hostname:/redoc`
+https://pacific-ridge-81267.herokuapp.com/redoc
 
-### Push to Heroku
+## Run locally
 
-`git subtree --prefix blog_backend push heroku master`
+- `blog_backend` must be the current folder
+
+- Activate virtual env or create a new one (and activate it after)
+
+  ```python
+  python -m venv <virtual env path>   # create
+  . ./env/bin/activate                # activate
+  ```
+
+- Install pip libraries
+
+  ```
+  pip install -r requirements.txt
+  ```
+
+- ### DB setup (first time only)
+  ```
+  python manage.py makemigrations
+  python manage.py migrate
+  ```
+- Run server
+
+  ```
+  python manage.py runserver
+  ```
+
+- Test endpoints
+  ```
+  coverage run manage.py test
+  ```
+
+# DevOps
+
+## Push to Heroku
+
+- From root folder (task-blog)
+  ```
+  git subtree --prefix blog_backend push heroku master
+  ```
