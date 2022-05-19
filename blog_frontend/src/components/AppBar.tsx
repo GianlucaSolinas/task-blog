@@ -12,7 +12,17 @@ export default function BlogAppBar() {
   const { currentUser, isLoading } = useCurrentUser();
 
   if (["login", "register"].includes(pathname.split("/")[1])) {
-    return <></>;
+    return (
+      <React.Fragment>
+        <AppBar position="sticky" sx={{ textAlign: "center" }}>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Blog Task Greencast
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </React.Fragment>
+    );
   }
 
   const authorShownName = getAuthorShownName(currentUser);

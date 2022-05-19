@@ -1,14 +1,11 @@
 .App {
-  height: 100%;
   padding: 1rem;
+  overflow-y: auto;
+  height: calc(100vh - 64px);
 }
 
 .FabContainer {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-}
-
-#root {
-  height: 100%;
 }

@@ -56,7 +56,7 @@ const PostSingle = () => {
 
   return (
     <div>
-      <Button startIcon={<ArrowBack />} color="secondary" onClick={() => navigate("../posts")}>
+      <Button startIcon={<ArrowBack />} color="secondary" variant="text" onClick={() => navigate("../posts")}>
         Back
       </Button>
       <Backdrop open={isLoading}>
