@@ -1,7 +1,7 @@
 from .models import Post
 from rest_framework import generics
-
 from .serializers import PostSerializer
+
 class PostCreate(generics.CreateAPIView):
     # API endpoint that allows creation of a new Post
     queryset = Post.objects.none()
